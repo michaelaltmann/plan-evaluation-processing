@@ -72,7 +72,7 @@ def main(organization, file):
   Path(folder).mkdir(parents=True, exist_ok=True)
   for _,row in plans.iterrows():
     # Write row["plan"] to disk
-    file = folder / f"plan_{row['id']}.csv"
+    file = folder / f"assignment-{row['id']}.csv"
     plan = row["plan"]
     if row["type"] == "plan":
       fieldnames = ['BLOCKID', 'DISTRICT']
