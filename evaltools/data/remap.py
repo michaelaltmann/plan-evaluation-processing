@@ -23,7 +23,14 @@ def remap(plans, unitmaps, popmap=None) -> Callable:
     """
     def _(row):
         # Get the assignment for the row.
-        assignment = ast.literal_eval(row["plan"])
+        plan = row["plan"]
+        # If plan is a string, eval it 
+        if type(plan) == str:
+            assignment = ast.literal_eval(plan)
+        elif type(plan) == dict:
+            assignment = plan   
+        else:
+            raise Exception(f'Cannot convert plan whose type is {type(plan)} to dict')
 
         # Attempt to get the type of units specified by the row; if we can't – i.e.
         # the user didn't specify a unit mapping corresponding to that unit type

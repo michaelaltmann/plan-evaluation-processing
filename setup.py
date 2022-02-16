@@ -2,9 +2,9 @@
 from setuptools import setup, find_packages
 
 requirements = [
-    "pandas", "scipy", "networkx", "geopandas", "shapely", "matplotlib",
+    "maup==1.0.6",  "scipy", "networkx",   "matplotlib",
     "gerrychain", "sortedcontainers", "gurobipy", "jsonlines", "opencv-python",
-    "imageio", "us", "pydantic", "censusdata", "seaborn"
+    "imageio", "us", "pydantic", "censusdata", "seaborn", "python-dotenv"
 ]
 
 setup(
