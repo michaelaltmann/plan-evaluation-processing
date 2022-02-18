@@ -18,7 +18,9 @@ class Submission(BaseModel):
     link: str
     """A districtr URL."""
     plan: dict
-    """districtr plan object."""
+    """Full districtr plan object."""
+    assignments: dict
+    """districtr assignments object."""
     id: str
     """districtr identifier."""
     units: str
@@ -140,7 +142,7 @@ def submissions(state, sample=None) -> List[Submission]:
         districtr = individual(identifier)
         
         # Force all plan keys and values to strings.
-        plan = {
+        assignments = {
             str(k): str(v) if type(v) is not list else str(v[0])
             for k, v in districtr["plan"]["assignment"].items()
         }
@@ -152,7 +154,8 @@ def submissions(state, sample=None) -> List[Submission]:
         submissions.append(Submission(
             link=entity["link"],
             id=identifier,
-            plan=plan,
+            plan=districtr["plan"],
+            assignments=assignments,
             units=units,
             unitsType=unitsType,
             tileset=tileset,
