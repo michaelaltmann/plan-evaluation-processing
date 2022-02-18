@@ -80,7 +80,7 @@ def main(organization, file):
       fieldnames = ['BLOCKID', 'COI']
     import csv
     with open(file, 'w', newline='') as csvfile:
-      writer = csv.writer(csvfile, delimiter='|', quoting=csv.QUOTE_MINIMAL)
+      writer = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL)
       writer.writerow(fieldnames)
       writer.writerows(plan.items())
 def usage():
