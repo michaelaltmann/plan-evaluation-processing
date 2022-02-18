@@ -15,11 +15,13 @@ and generates block assignment files for each Districtr plan
 
 def as_submissions(df: pd.DataFrame):
     submissions = []
+    print('Getting plan for Districtr IDs: ', end='', flush=True)
     df['districtrID'] = parse_id(df["link"], df=True)
     for _,row in df[df['districtrID'].notna()].iterrows():
       identifier = row['districtrID']
       if identifier:
           # Retrieve the required data points.
+          print(f' {identifier}', end='', flush=True)
           districtr = individual(identifier)
           
           # Force all plan keys and values to strings.
@@ -45,11 +47,10 @@ def as_submissions(df: pd.DataFrame):
               tileset=tileset,
               type=row["type"]
           ))
-
+    print('')
     return submissions
 
 def main(organization, file):
-  print(f"Running main with {organization} {file} from {os.getcwd()}")
 
   ## Read a CSV file that includes a column called "link"
   df = pd.read_csv(file)
