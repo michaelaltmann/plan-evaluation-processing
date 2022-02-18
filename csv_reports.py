@@ -35,15 +35,15 @@ def get_portal_data_and_generate_csvs(environment: str, organization: str, API_K
     ### Write to disk
     datestring = datetime.now(tz=timezone.utc).strftime("%Y-%m-%dT%H:%M")
 
-    Path("exports").mkdir(parents=True, exist_ok=True)
+    Path(f"exports/{organization}").mkdir(parents=True, exist_ok=True)
 
     file = (
-        f"exports/{organization}_{environment}_CumulativeSubmissions_{datestring}.csv"
+        f"exports/{organization}/{organization}_{environment}_CumulativeSubmissions_{datestring}.csv"
     )
     submissions_df.sort_values(by="id").to_csv(file,index=False)
     print(f"Wrote {len(submissions_df.index)} to {file}")
 
-    file = f"exports/{organization}_{environment}_CumulativeComments_{datestring}.csv"
+    file = f"exports/{organization}/{organization}_{environment}_CumulativeComments_{datestring}.csv"
     comments_df.sort_values(by="id").to_csv(file, index=False)
     print(f"Wrote {len(comments_df.index)} to {file}")
 
