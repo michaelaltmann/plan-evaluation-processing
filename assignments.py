@@ -92,10 +92,13 @@ def main(organization, file):
     # Write row["plan"] to disk
     file = folder / f"assignments-{row['id']}.csv"
     plan = row["plan"]
-    if row["type"] == "plan":
+    if row["type"] == "plan" or row["type"] == "draft":
       fieldnames = ['BLOCKID', 'DISTRICT']
     elif row["type"] == "coi":
       fieldnames = ['BLOCKID', 'COI']
+    else:
+      print(f"\nUnexpected type {row['type']}")
+      fieldnames = ['BLOCKID', 'REGION']
     import csv
     with open(file, 'w', newline='') as csvfile:
       writer = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL)
