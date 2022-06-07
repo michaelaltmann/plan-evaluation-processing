@@ -32,7 +32,7 @@ def remap(plans, unitmaps, popmap=None) -> Callable:
             unitsType = row["units"]
             unitmap = unitmaps[unitsType]
         except:
-            print(f"No unit mapping provided for {row['units']}; skipping.")
+            print(f"No unit mapping provided for {row['units']}; no remapping performed.")
             return assignment
 
         # What kind of mapping do we have? If `mapping` is from a single key

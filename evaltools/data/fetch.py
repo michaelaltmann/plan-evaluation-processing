@@ -6,6 +6,7 @@ import io
 from datetime import datetime
 from pydantic import BaseModel
 from typing import Tuple, List, Union
+import re
 
 from .URLs import ids, csvs, one
 
@@ -203,8 +204,8 @@ def parse_id(l, df=True) -> Union[str, pd.Series]:
     Returns:
         districtr ID.
     """
-    if df: return l.str.split("/").str[-1].str.split("?").str[0]
-    return l.split("/")[-1].split("?")[0]
+    if df: return l.str.split("/").str[-1].str.split("?").str[0].replace("\D","", regex=True)
+    return re.sub("\D",   "",   l.split("/")[-1].split("?")[0])
 
 
 def parse_datetime(d) -> pd.Series:

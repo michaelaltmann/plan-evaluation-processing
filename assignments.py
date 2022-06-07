@@ -15,24 +15,29 @@ and generates block assignment files for each Districtr plan
 
 def as_submissions(df: pd.DataFrame):
     submissions = []
-    print('Getting plan for Districtr IDs: ', end='', flush=True)
+    df = df[df['link'].notna() &  df['link'].str.lower().str.startswith("https://districtr.org/")]
     df['districtrID'] = parse_id(df["link"], df=True)
+    print('Getting plan for Districtr IDs: ', end='', flush=True)
     for _,row in df[df['districtrID'].notna()].iterrows():
       identifier = row['districtrID']
-      if identifier:
+      if identifier and row['type'] != 'other':
           # Retrieve the required data points.
           print(f' {identifier}', end='', flush=True)
           districtr = individual(identifier)
-          
-          # Force all plan keys and values to strings.
-          if "assignment" in districtr["plan"]:
-            assignments = {
-                str(k): str(v) if type(v) is not list else str(v[0])
-                for k, v in districtr["plan"]["assignment"].items()
-            }
+          if "plan" in districtr:
+            # Force all plan keys and values to strings.
+            if "assignment" in districtr["plan"]:
+              assignments = {
+                  str(k): str(v) if type(v) is not list else str(v[0])
+                  for k, v in districtr["plan"]["assignment"].items()
+              }
+            else:
+              #User drew a completely empty map
+              assignments = {}
           else:
-            #User drew a completely empty map
-            assignments = {}
+            print (f"\nDistrictr for {identifier} object did not have plan")
+            print (districtr)
+            continue
           units = districtr["plan"]["units"]["name"]
           unitsType = districtr["plan"]["units"]["unitType"]
           tileset = districtr["plan"]["units"]["tilesets"][0]["sourceLayer"]
