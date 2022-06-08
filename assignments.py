@@ -15,7 +15,7 @@ and generates block assignment files for each Districtr plan
 
 def as_submissions(df: pd.DataFrame):
     submissions = []
-    df = df[df['link'].notna() &  df['link'].str.lower().str.startswith("https://districtr.org/")]
+    df = df[df['link'].notna() &  df['link'].str.lower().str.contains("/districtr.org/")]
     df['districtrID'] = parse_id(df["link"], df=True)
     print('Getting plan for Districtr IDs: ', end='', flush=True)
     for _,row in df[df['districtrID'].notna()].iterrows():
@@ -53,6 +53,8 @@ def as_submissions(df: pd.DataFrame):
               tileset=tileset,
               type=row["type"]
           ))
+      else:
+        print (f"Skipping plan {row['type']} of type other ")
     print('')
     return submissions
 
