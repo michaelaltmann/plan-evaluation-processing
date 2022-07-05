@@ -15,7 +15,7 @@ and generates block assignment files for each Districtr plan
 
 def as_submissions(df: pd.DataFrame):
     submissions = []
-    df = df[df['link'].notna() &  df['link'].str.lower().str.contains("/districtr.org/")]
+    df = df[df['link'].notna() &  df['link'].str.lower().str.contains("districtr.org/")]
     df['districtrID'] = parse_id(df["link"], df=True)
     print('Getting plan for Districtr IDs: ', end='', flush=True)
     for _,row in df[df['districtrID'].notna()].iterrows():
@@ -96,27 +96,34 @@ def main(organization, file):
 
   print ('Writing assignments to ', end='', flush=True)
   for _,row in plans.iterrows():
-    # Write row["plan"] to disk
+
+    # Write row["plan"] to disk]
     file = folder / f"assignments-{row['id']}.csv"
     plan = row["plan"]
+    for key in row.keys():
+      print(key)
+    for key in plan.keys():
+      print(key)
+    colName = "id-" + plan['place']['id'] + "-" + plan['units']['id']
+    print(colName)
     if row["type"] == "plan" or row["type"] == "draft":
-      fieldnames = ['BLOCKID', 'DISTRICT']
+      fieldnames = [colName, 'DISTRICT']
     elif row["type"] == "coi":
-      fieldnames = ['BLOCKID', 'COI']
+      fieldnames = [colName, 'COI']
     else:
       print(f"\nUnexpected type {row['type']}")
-      fieldnames = ['BLOCKID', 'REGION']
+      fieldnames = [colName, 'REGION']
     import csv
     with open(file, 'w', newline='') as csvfile:
       writer = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL)
       writer.writerow(fieldnames)
-      writer.writerows(plan.items())
+      writer.writerows(row['assignments'].items())
     print (f" {file}", end='', flush=True)
   print ('')
 
 def usage():
   print (f"Usage:  python {sys.argv[0]} ORG, CSV_FILE")
-  print (f"Usage:  python {sys.argv[0]} minneapolis exports/minneapolis_prod_CumulativeSubmissions_2021-12-20T14:59.csv")
+  print (f"Ex:  python {sys.argv[0]} minneapolis exports/minneapolis_prod_CumulativeSubmissions_2021-12-20T14:59.csv")
 
 
 if __name__ == "__main__":
